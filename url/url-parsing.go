@@ -30,9 +30,9 @@ func parseOneURL(str string) {
 	fmt.Println(u.Fragment)
 
 	fmt.Println(u.RawQuery)
-	m, _ := url.ParseQuery(u.RawQuery)
-	fmt.Println(m)
-	for k, v := range m {
+	query, _ := url.ParseQuery(u.RawQuery)
+	fmt.Println(query)
+	for k, v := range query {
 		fmt.Printf("%v=%v;\n", k, v)
 	}
 

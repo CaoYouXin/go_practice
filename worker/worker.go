@@ -15,19 +15,26 @@ func worker(id int, jobs <-chan int, results chan<- int) {
 }
 
 func main() {
-	jobs := make(chan int, 100)
-	results := make(chan int, 100)
+	jobs := make(chan int)
+	results := make(chan int)
+	done := make(chan bool)
 
 	for w := 1; w <= 3; w++ {
 		go worker(w, jobs, results)
 	}
 
+	go func() {
+		for j := 0; j < 10; j++ {
+			<-results
+		}
+		done <- true
+	}()
+
 	for j := 0; j < 10; j++ {
 		jobs <- j
 	}
-	// close(jobs)
+	close(jobs)
 
-	for j := 0; j < 10; j++ {
-		<-results
-	}
+	<-done
+	fmt.Println("Program finished!")
 }
