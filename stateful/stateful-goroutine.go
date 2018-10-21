@@ -13,9 +13,8 @@ type readOp struct {
 }
 
 type writeOp struct {
-	key   int
-	value int
-	suc   chan bool
+	key int
+	suc chan bool
 }
 
 func main() {
@@ -34,7 +33,7 @@ func main() {
 			case read := <-reads:
 				read.resp <- data[read.key]
 			case write := <-writes:
-				data[write.key] = write.value
+				data[write.key]++
 				write.suc <- true
 			case <-logs:
 				fmt.Println("data:", data)
@@ -61,9 +60,8 @@ func main() {
 		go func() {
 			for {
 				write := &writeOp{
-					key:   rand.Intn(5),
-					value: rand.Intn(100),
-					suc:   make(chan bool),
+					key: rand.Intn(5),
+					suc: make(chan bool),
 				}
 				writes <- write
 				if suc := <-write.suc; suc {
