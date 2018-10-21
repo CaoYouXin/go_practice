@@ -28,8 +28,11 @@ func main() {
 	sort.Ints(ints)
 	fmt.Println(ints, sort.IntsAreSorted(ints))
 
-	strsByLen := []string{"annie", "joe", "youxin"}
-	byLenStrs := byLength(strsByLen)
+	byAlphStrs := []string{"weight", "muscie", "fat"}
+	sort.Strings(byAlphStrs)
+	fmt.Println(byAlphStrs, sort.StringsAreSorted(byAlphStrs))
+
+	byLenStrs := byLength([]string{"weight", "muscie", "fat"})
 	sort.Sort(byLenStrs)
-	fmt.Println(strsByLen, byLenStrs, sort.IsSorted(byLenStrs), sort.StringsAreSorted(strsByLen))
+	fmt.Println(byLenStrs, sort.IsSorted(byLenStrs))
 }
