@@ -33,9 +33,8 @@ func main() {
 		go func() {
 			for {
 				key := rand.Intn(5)
-				value := rand.Intn(100)
 				mutex.Lock()
-				data[key] = value
+				data[key]++
 				mutex.Unlock()
 				atomic.AddUint64(&writeOps, 1)
 				time.Sleep(time.Millisecond)

@@ -2,20 +2,39 @@ package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
-func ping(ping chan<- string, msg string) {
-	ping <- msg
+var status = make(map[string]int)
+var mutex = &sync.Mutex{}
+
+func ping(ping chan<- string, pong <-chan string) {
+	for {
+		ping <- <-pong
+		mutex.Lock()
+		status["ping"]++
+		mutex.Unlock()
+	}
 }
 
 func pong(ping <-chan string, pong chan<- string) {
-	pong <- <-ping
+	for {
+		pong <- <-ping
+		mutex.Lock()
+		status["pong"]++
+		mutex.Unlock()
+	}
 }
 
 func main() {
 	pings := make(chan string, 1)
 	pongs := make(chan string, 1)
-	go ping(pings, "whatever")
+	pings <- "whatever"
+	go ping(pings, pongs)
 	go pong(pings, pongs)
-	fmt.Println(<-pongs)
+	time.Sleep(time.Second)
+	mutex.Lock()
+	fmt.Println("status within 1 second:", status)
+	mutex.Unlock()
 }
