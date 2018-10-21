@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	mrand "math/rand"
+	"math/rand"
 	"time"
 )
 
 func main() {
-	p := fmt.Println
 	seed := time.Now().UnixNano()
-
-	mrand.NewSource(seed)
-	p(mrand.Intn(100))
+	mrand := rand.New(rand.NewSource(seed))
+	fmt.Println(mrand.Intn(100))
 }
