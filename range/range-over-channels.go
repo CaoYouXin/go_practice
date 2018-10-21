@@ -6,9 +6,11 @@ import (
 
 func main() {
 	msgs := make(chan string, 1)
-	msgs <- "one"
-	msgs <- "two"
-	close(msgs)
+	go func() {
+		msgs <- "one"
+		msgs <- "two"
+		close(msgs)
+	}()
 
 	for msg := range msgs {
 		fmt.Println(msg)
